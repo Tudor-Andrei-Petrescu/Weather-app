@@ -84,6 +84,9 @@ function App() {
     if(hours <10)
     hours = '0' + hours
     var minutes = d.getUTCMinutes();
+    console.log(minutes);
+    if(minutes <10)
+    minutes = '0'+minutes;
     var formattedTime = hours + ':' + minutes;
     if(formattedTime>localSunset)
     daylight = 0;
@@ -125,7 +128,7 @@ function getIndex(){
         value = {location} 
         onKeyPress = {searchLocation}
         onChange ={event => setLocation(event.target.value)}
-        placeholder = 'Enter a location'
+        placeholder = ' Enter a location'
         type="text"></input>
         </div>
       <div className='container'>
