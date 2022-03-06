@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Hubballi&display=swap');
-
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 
 }
-
+:root {
+  --background-image: url('./assets/default.jpg');
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Hubballi', 'Roboto', 'Oxygen',
@@ -28,6 +29,10 @@ h1{
   width: 100%;
   height: 100vh;
   position: relative;
+  background-image: var(--background-image);
+  background-size : cover;
+  background-position: bottom;
+  transition: 0.4 ease-out;
   background-color: rgba(0, 0, 0, 0.4);
   color: #fff;
   overflow:auto;
@@ -43,6 +48,24 @@ h1{
   z-index: -1;
 }
 
+
+.App .search{
+
+  text-align: center;
+  padding: 1rem;
+}
+.App input{
+  padding: .7rem, 1.5rem;
+  font-size: 1.2rem;
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.4) ;
+  background: rgba(0, 0, 0, 0.1);
+  color: #f8f8f8;
+}
+
+::placeholder{
+  color:#f8f8f8;
+}
 .container{
 
   max-width: 700px;

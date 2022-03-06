@@ -1,5 +1,19 @@
 import React,{useState} from 'react'
 import axios from 'axios'
+import { useEffect } from "react";
+import dayClear from './assets/day/clear.jpg'
+import dayDrizzle from './assets/day/drizzle.jpg'
+import dayCloudy from './assets/day/cloudy.jpg'
+import dayRain from './assets/day/rain.jpg'
+import daySnow from './assets/day/snow.jpg'
+import dayThunder from './assets/day/thunderstorm.jpg'
+
+import nightClear from './assets/night/clear.jpg'
+import nightDrizzle from './assets/night/drizzle.jpg'
+import nightCloudy from './assets/night/cloudy.jpg'
+import nightRain from './assets/night/rain.jpg'
+import nightSnow from './assets/night/snow.jpg'
+import nightThunder from './assets/night/Thunderstorm.jpg'
 
 function App() {
   const [data,setData] = useState({})
@@ -9,8 +23,11 @@ function App() {
   const [currentTime,setCurrentTime]  = useState({})
   const [localSunset, setLocalSunset] = useState(' ')
   const [localSunrise, setLocalSunrise] = useState(' ')
+  var daylight = 1;
+  var wtype =0;
+  const dayWall = [dayClear, dayDrizzle, dayCloudy, dayRain,  daySnow, dayThunder]
+  const nightWall = [nightClear, nightDrizzle, nightCloudy, nightRain,  nightSnow, nightThunder]
   const searchLocation = (event) =>{
-
     if(event.key == 'Enter'){
 
       axios.get(weatherURL).then(response => {
@@ -50,7 +67,7 @@ function App() {
       hours = hours -24
     }
     var minutes = "0" + sunriseDate.getMinutes()
-    var formattedTime = hours + ':' + minutes.substr(-2);
+    var formattedTime = '0' + hours + ':' + minutes.substr(-2);
     setLocalSunrise(formattedTime)
   }
 
@@ -61,17 +78,48 @@ function App() {
     if(hours <=0){
       hours = 24+hours
     }
-   if(hours >24){
+   if(hours >=24){
       hours = hours - 24
     }
+    if(hours <10)
+    hours = '0' + hours
     var minutes = d.getUTCMinutes();
     var formattedTime = hours + ':' + minutes;
+    if(formattedTime>localSunset)
+    daylight = 0;
   setLocalTimeZone(formattedTime)
   }
 
- 
+  function setBackground (daylight,index){
+    if(daylight == 1)
+    document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`);
+    else  document.documentElement.style.setProperty('--background-image', `url(${nightWall[index]})`);
+}
+
+function getIndex(){
+  if(data.weather[0].main == "Drizzle")
+  return 1;
+  if(data.weather[0].main == "Clouds")
+  return 2;
+  if(data.weather[0].main == "Rain")
+  return 3;
+  if(data.weather[0].main == "Snow")
+  return 4;
+  if(data.weather[0].main == "Thunder")
+  return 5;
+  return 0;
+} 
+
+  if(typeof data.name != "undefined"){
+    if(localTimeZone>localSunset || localTimeZone < localSunrise)
+    daylight=0;
+    let index = getIndex();
+    setBackground(daylight,index);
+  }
+
   return (
-    <div className='App'>
+    <div  className= 'App'> 
+
       <div className='search'>
         <input
         value = {location} 
