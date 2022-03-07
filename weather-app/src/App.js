@@ -1,132 +1,210 @@
 import React,{useState} from 'react'
 import axios from 'axios'
-import { useEffect } from "react";
+
+
 import dayClear from './assets/day/clear.jpg'
 import dayDrizzle from './assets/day/drizzle.jpg'
 import dayCloudy from './assets/day/cloudy.jpg'
 import dayRain from './assets/day/rain.jpg'
 import daySnow from './assets/day/snow.jpg'
 import dayThunder from './assets/day/thunderstorm.jpg'
+import dayTornado from './assets/day/tornado.jpg'
+import dayMist from './assets/day/mist.jpg'
+
+import clearDayIcon from './assets/dayIcon/clearDayIcon.png'
+import cloudDayIcon from './assets/dayIcon/cloudDayIcon.png'
+import snowDayIcon from './assets/dayIcon/snowDayIcon.png'
+import rainDayIcon from './assets/dayIcon/rainDayIcon.png'
+import thunderIcon from './assets/dayIcon/thunderIcon.png'
+import tornadoIcon from './assets/dayIcon/tornadoIcon.png'
+import mistIcon from './assets/dayIcon/mistIcon.png'
 
 import nightClear from './assets/night/clear.jpg'
 import nightDrizzle from './assets/night/drizzle.jpg'
 import nightCloudy from './assets/night/cloudy.jpg'
 import nightRain from './assets/night/rain.jpg'
 import nightSnow from './assets/night/snow.jpg'
-import nightThunder from './assets/night/Thunderstorm.jpg'
+import nightThunder from './assets/night/thunderstorm.jpg'
+import nightTornado from './assets/night/tornado.jpg'
+import nightMist from './assets/day/mist.jpg'
+
+import clearNightIcon from './assets/nightIcon/clearNight.png'
+import cloudNightIcon from './assets/nightIcon/cloudNightIcon.png'
+import snowNightIcon from './assets/nightIcon/snowNightIcon.png'
+import rainNightIcon from './assets/nightIcon/rainNightIcon.png'
 
 function App() {
   const [data,setData] = useState({})
   const [location, setLocation] = useState('') 
   const weatherURL=  `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=c84660ba35fa7381c7cd2d4251ed65e8`
   const [localTimeZone,setLocalTimeZone] = useState('')
-  const [currentTime,setCurrentTime]  = useState({})
   const [localSunset, setLocalSunset] = useState(' ')
   const [localSunrise, setLocalSunrise] = useState(' ')
   var daylight = 1;
-  var wtype =0;
-  const dayWall = [dayClear, dayDrizzle, dayCloudy, dayRain,  daySnow, dayThunder]
-  const nightWall = [nightClear, nightDrizzle, nightCloudy, nightRain,  nightSnow, nightThunder]
+  var link =' ';
+  const dayWall = [dayClear, dayDrizzle, dayCloudy, dayRain,  daySnow, dayThunder,dayTornado,dayMist]
+  const nightWall = [nightClear, nightDrizzle, nightCloudy, nightRain,  nightSnow, nightThunder,nightTornado,nightMist]
+  const dayIcon = [clearDayIcon,rainDayIcon,cloudDayIcon,rainDayIcon,snowDayIcon,thunderIcon,tornadoIcon,mistIcon]
+  const nightIcon = [clearNightIcon,rainNightIcon,cloudNightIcon,rainNightIcon,snowDayIcon]
   const searchLocation = (event) =>{
-    if(event.key == 'Enter'){
-
+    if(event.key === 'Enter'){
+      
       axios.get(weatherURL).then(response => {
+
         setData(response.data)
         getLocalSunset(response)
         getLocalSunrise(response)
         getCurrentTime(response)
-      })
-      setLocation('')
+        if(typeof response === "undefined"){
+          alert("Could not find the country");
+        }
+      }, reject =>{ alert("Could not find requested city")}
+      )
+    
+      setLocation('');
     } 
 
   }
 
   const getLocalSunset = (response) =>{
-    const sunsetTime = response.data.sys.sunset
-    const sunsetDate = new Date(sunsetTime* 1e3)
-    var hours = sunsetDate.getHours() + response.data.timezone/3600
+
+    const sunsetTime = response.data.sys.sunset;
+    const sunsetDate = new Date(sunsetTime* 1e3);
+    var hours = sunsetDate.getHours() + response.data.timezone/3600;
+
     if(hours <=0){
-      hours = 24+hours
+      hours = 24 + hours;
     }
+
     if(hours >24){
-      hours = hours -24
+      hours = hours - 24;
     }
-    var minutes = "0" + sunsetDate.getMinutes()
+
+    var minutes = "0" + sunsetDate.getMinutes();
     var formattedTime = hours + ':' + minutes.substr(-2);
-    setLocalSunset(formattedTime)
+    setLocalSunset(formattedTime);
   }
 
   const getLocalSunrise = (response) =>{
-    const sunriseTime = response.data.sys.sunrise
-    const sunriseDate = new Date(sunriseTime * 1e3)
-    var hours = sunriseDate.getHours() + response.data.timezone/3600
-    if(hours <=0){
-      hours = 24+hours
+
+    const sunriseTime = response.data.sys.sunrise;
+    const sunriseDate = new Date(sunriseTime * 1e3);
+    var hours = sunriseDate.getHours() + response.data.timezone/3600;
+
+    if(hours <= 0){
+      hours = 24+hours;
     }
-    if(hours >24){
-      hours = hours -24
+    if(hours > 24){
+      hours = hours -24;
     }
-    var minutes = "0" + sunriseDate.getMinutes()
+    var minutes = "0" + sunriseDate.getMinutes();
     var formattedTime = '0' + hours + ':' + minutes.substr(-2);
-    setLocalSunrise(formattedTime)
+    setLocalSunrise(formattedTime);
   }
 
 
   const getCurrentTime = (response) => {
+
     const d = new Date();
     var hours = d.getUTCHours() + response.data.timezone/3600;
+
     if(hours <=0){
-      hours = 24+hours
+      hours = 24+hours;
     }
+
    if(hours >=24){
-      hours = hours - 24
+      hours = hours - 24;
     }
-    if(hours <10)
-    hours = '0' + hours
+
+    if(hours <10){
+      hours = '0' + hours;
+    }
+  
     var minutes = d.getUTCMinutes();
-    console.log(minutes);
-    if(minutes <10)
-    minutes = '0'+minutes;
+
+    if(minutes <10){
+      minutes = '0'+minutes;
+    }
+
     var formattedTime = hours + ':' + minutes;
-    if(formattedTime>localSunset)
-    daylight = 0;
-  setLocalTimeZone(formattedTime)
+
+    if(formattedTime>localSunset){
+      daylight = 0;
+    }
+    
+  setLocalTimeZone(formattedTime);
   }
 
-  function setBackground (daylight,index){
-    if(daylight == 1)
-    document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`);
-    else  document.documentElement.style.setProperty('--background-image', `url(${nightWall[index]})`);
-}
+  function setBackground(daylight, index) {
+    if (daylight === 1)
+      document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`)
+    else
+      document.documentElement.style.setProperty('--background-image', `url(${nightWall[index]})`)
+  }
 
 function getIndex(){
-  if(data.weather[0].main == "Drizzle")
-  return 1;
-  if(data.weather[0].main == "Clouds")
-  return 2;
-  if(data.weather[0].main == "Rain")
-  return 3;
-  if(data.weather[0].main == "Snow")
-  return 4;
-  if(data.weather[0].main == "Thunder")
-  return 5;
-  return 0;
+
+  if(data.weather[0].main === "Drizzle"){
+    return 1;
+  }
+
+  if(data.weather[0].main === "Clouds"){
+    return 2;
+  }
+
+  if(data.weather[0].main === "Rain"){
+    return 3;
+  }
+
+  if(data.weather[0].main === "Snow"){
+    return 4;
+  }
+
+  if(data.weather[0].main === "Thunder"){
+    return 5;
+  }
+  
+  if(data.weather[0].main === "Tornado"){
+    return 6;
+  }
+
+  if(data.weather[0].main === "Mist" || data[0].weather.main === "Smoke" ||
+    data.weather[0].main === "Haze" ||  data.weather[0].main === "Fog"){
+      return 7;
+    }
+
+
+  return -1;
 } 
 
   if(typeof data.name != "undefined"){
-    if(localTimeZone>localSunset || localTimeZone < localSunrise)
-    daylight=0;
-    let index = getIndex();
-    setBackground(daylight,index);
-  }
 
+    if(localTimeZone>localSunset || localTimeZone < localSunrise){
+      daylight=0;
+    }
+    let index = getIndex();
+    if(index !== -1){
+      
+    setBackground(daylight,index);
+    if(index >= 5){
+      link = dayIcon[index];
+    }
+    else{
+      if(daylight===1){
+        link = dayIcon[index];
+
+      }
+      else link = nightIcon[index];
+    }
+
+    }
+  }
   return (
     <div  className= 'App'> 
-
       <div className='search'>
         <input
         value = {location} 
-        onKeyPress = {searchLocation}
+        onKeyPress ={searchLocation}
         onChange ={event => setLocation(event.target.value)}
         placeholder = ' Enter a location'
         type="text"></input>
@@ -137,6 +215,7 @@ function getIndex(){
           <div className='location'>
             <p>{data.name}</p>
             {data.sys ? <p>{data.sys.country}</p> : null}
+            {data.sys ? <img src={link}/> : null }
             </div>
 
             <div className='temp'>
@@ -144,11 +223,11 @@ function getIndex(){
               </div>
 
               <div className='description'>
-              {data.weather ? <p>{data.weather[0].main}</p> : null}
+              {data.weather ? <h1  >{data.weather[0].main}</h1> : null}
                 </div>
           </div>
 
-          {data.name != undefined &&   
+          {data.name !== undefined &&   
 
           <div className='bottom'>
 
