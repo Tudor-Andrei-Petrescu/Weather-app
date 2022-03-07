@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
 import axios from 'axios'
 
-
 import dayClear from './assets/day/clear.jpg'
 import dayDrizzle from './assets/day/drizzle.jpg'
 import dayCloudy from './assets/day/cloudy.jpg'
@@ -42,6 +41,7 @@ function App() {
   const [localSunrise, setLocalSunrise] = useState(' ')
   var daylight = 1;
   var link =' ';
+  const citiesArray = cities;
   const dayWall = [dayClear, dayDrizzle, dayCloudy, dayRain,  daySnow, dayThunder,dayTornado,dayMist]
   const nightWall = [nightClear, nightDrizzle, nightCloudy, nightRain,  nightSnow, nightThunder,nightTornado,nightMist]
   const dayIcon = [clearDayIcon,rainDayIcon,cloudDayIcon,rainDayIcon,snowDayIcon,thunderIcon,tornadoIcon,mistIcon]
@@ -50,11 +50,12 @@ function App() {
     if(event.key === 'Enter'){
       
       axios.get(weatherURL).then(response => {
-
+        
         setData(response.data)
         getLocalSunset(response)
         getLocalSunrise(response)
         getCurrentTime(response)
+        console.log(response.data)
         if(typeof response === "undefined"){
           alert("Could not find the country");
         }
@@ -144,6 +145,10 @@ function App() {
 
 function getIndex(){
 
+  if(data.weather[0].main === "Clear"){
+    return 0;
+  }
+  
   if(data.weather[0].main === "Drizzle"){
     return 1;
   }
@@ -168,10 +173,10 @@ function getIndex(){
     return 6;
   }
 
-  if(data.weather[0].main === "Mist" || data[0].weather.main === "Smoke" ||
+  /*if(data.weather[0].main === "Mist" || data.weather[0].main === "Smoke" ||
     data.weather[0].main === "Haze" ||  data.weather[0].main === "Fog"){
       return 7;
-    }
+    }*/
 
 
   return -1;
