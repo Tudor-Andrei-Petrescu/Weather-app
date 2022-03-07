@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import axios from 'axios'
+import axios from 'axios' 
 
 import dayClear from './assets/day/clear.jpg'
 import dayDrizzle from './assets/day/drizzle.jpg'
@@ -41,11 +41,10 @@ function App() {
   const [localSunrise, setLocalSunrise] = useState(' ')
   var daylight = 1;
   var link =' ';
-  const citiesArray = cities;
   const dayWall = [dayClear, dayDrizzle, dayCloudy, dayRain,  daySnow, dayThunder,dayTornado,dayMist]
   const nightWall = [nightClear, nightDrizzle, nightCloudy, nightRain,  nightSnow, nightThunder,nightTornado,nightMist]
   const dayIcon = [clearDayIcon,rainDayIcon,cloudDayIcon,rainDayIcon,snowDayIcon,thunderIcon,tornadoIcon,mistIcon]
-  const nightIcon = [clearNightIcon,rainNightIcon,cloudNightIcon,rainNightIcon,snowDayIcon]
+  const nightIcon = [clearNightIcon,rainNightIcon,cloudNightIcon,rainNightIcon,snowNightIcon]
   const searchLocation = (event) =>{
     if(event.key === 'Enter'){
       
@@ -136,11 +135,15 @@ function App() {
   setLocalTimeZone(formattedTime);
   }
 
-  function setBackground(daylight, index) {
-    if (daylight === 1)
-      document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`)
-    else
-      document.documentElement.style.setProperty('--background-image', `url(${nightWall[index]})`)
+  function setDynamicData(daylight, index) {
+    if (daylight === 1){
+      document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`);
+    }
+    else{
+      document.documentElement.style.setProperty('--background-image', `url(${nightWall[index]})`);
+    }
+    document.documentElement.style.setProperty('--font-size', `1.7rem`);
+    document.documentElement.style.setProperty('--padding', `.7rem`);
   }
 
 function getIndex(){
@@ -173,10 +176,10 @@ function getIndex(){
     return 6;
   }
 
-  /*if(data.weather[0].main === "Mist" || data.weather[0].main === "Smoke" ||
+  if(data.weather[0].main === "Mist" || data.weather[0].main === "Smoke" ||
     data.weather[0].main === "Haze" ||  data.weather[0].main === "Fog"){
       return 7;
-    }*/
+    }
 
 
   return -1;
@@ -190,7 +193,7 @@ function getIndex(){
     let index = getIndex();
     if(index !== -1){
       
-    setBackground(daylight,index);
+    setDynamicData(daylight,index);
     if(index >= 5){
       link = dayIcon[index];
     }
