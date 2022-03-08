@@ -198,31 +198,35 @@ function getIndex(){
   return -1;
 } 
 /*Checks whether a query has been successful, and based on that it then sets the according background and icon*/
-  if(typeof data.name != "undefined"){
+  function checkForChanges(){
+    if(typeof data.name != "undefined"){
 
-    if(localTimeZone>localSunset || localTimeZone < localSunrise){
-      daylight=0;
-    }
-    let index = getIndex();
-    if(index !== -1){
-      
-    setDynamicData(daylight,index);
-    if(index >= 5){
-      link = dayIcon[index];
-    }
-    else{
-      if(daylight===1){
-        link = dayIcon[index];
-
+      if(localTimeZone>localSunset || localTimeZone < localSunrise){
+        daylight=0;
       }
-      else link = nightIcon[index];
-    }
-
-    }
-    else{
-      document.documentElement.style.setProperty('--background-image', `url(${defaultImg})`);
+      let index = getIndex();
+      if(index !== -1){
+        
+      setDynamicData(daylight,index);
+      if(index >= 5){
+        link = dayIcon[index];
+      }
+      else{
+        if(daylight===1){
+          link = dayIcon[index];
+  
+        }
+        else link = nightIcon[index];
+      }
+  
+      }
+      else{
+        document.documentElement.style.setProperty('--background-image', `url(${defaultImg})`);
+      }
     }
   }
+checkForChanges();
+
   return (
     <div  className= 'App'> 
       <div className='search'>
