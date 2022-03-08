@@ -1,6 +1,8 @@
 import React,{useState} from 'react'
 import axios from 'axios' 
 
+import defaultImg from './assets/default.jpg'
+
 import dayClear from './assets/day/clear.jpg'
 import dayDrizzle from './assets/day/drizzle.jpg'
 import dayCloudy from './assets/day/cloudy.jpg'
@@ -33,12 +35,12 @@ import snowNightIcon from './assets/nightIcon/snowNightIcon.png'
 import rainNightIcon from './assets/nightIcon/rainNightIcon.png'
 
 function App() {
-  const [data,setData] = useState({})
-  const [location, setLocation] = useState('') 
-  const weatherURL=  `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=c84660ba35fa7381c7cd2d4251ed65e8`
-  const [localTimeZone,setLocalTimeZone] = useState('')
-  const [localSunset, setLocalSunset] = useState(' ')
-  const [localSunrise, setLocalSunrise] = useState(' ')
+  const [data,setData] = useState({});
+  const [location, setLocation] = useState('');
+  const weatherURL=  `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=c84660ba35fa7381c7cd2d4251ed65e8`;
+  const [localTimeZone,setLocalTimeZone] = useState('');
+  const [localSunset, setLocalSunset] = useState(' ');
+  const [localSunrise, setLocalSunrise] = useState(' ');
   var daylight = 1;
   var link =' ';
   const dayWall = [dayClear, dayDrizzle, dayCloudy, dayRain,  daySnow, dayThunder,dayTornado,dayMist]
@@ -50,11 +52,11 @@ function App() {
       
       axios.get(weatherURL).then(response => {
         
-        setData(response.data)
-        getLocalSunset(response)
-        getLocalSunrise(response)
-        getCurrentTime(response)
-        console.log(response.data)
+        setData(response.data);
+        getLocalSunset(response);
+        getLocalSunrise(response);
+        getCurrentTime(response);
+        console.log(response.data);
         if(typeof response === "undefined"){
           alert("Could not find the country");
         }
@@ -140,6 +142,7 @@ function App() {
       document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`);
     }
     else{
+
       document.documentElement.style.setProperty('--background-image', `url(${nightWall[index]})`);
     }
     document.documentElement.style.setProperty('--font-size', `1.7rem`);
@@ -206,6 +209,9 @@ function getIndex(){
     }
 
     }
+    else{
+      document.documentElement.style.setProperty('--background-image', `url(${defaultImg})`);
+    }
   }
   return (
     <div  className= 'App'> 
@@ -218,6 +224,7 @@ function getIndex(){
         type="text"></input>
         </div>
       <div className='container'>
+        
         <div className='top'>
 
           <div className='location'>
