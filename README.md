@@ -35,7 +35,7 @@ This will install react on your machine.
 
 ## Deployment
 
-To run the app in your browser, run the command npm start in the weather-app folder : 
+To run the app in your browser, run the command npm start in the terminal in the weather-app folder : 
 
 ```
 
