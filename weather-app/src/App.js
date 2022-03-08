@@ -51,23 +51,31 @@ function App() {
     if(event.key === 'Enter'){
       
       axios.get(weatherURL).then(response => {
-        
+        /*After fetching the data, it then stores the object in data const, and then calls the get functions to retrieve
+          the current time, sunset and sunrise in the given city*/
         setData(response.data);
         getLocalSunset(response);
         getLocalSunrise(response);
         getCurrentTime(response);
-        console.log(response.data);
-        if(typeof response === "undefined"){
-          alert("Could not find the country");
-        }
-      }, reject =>{ alert("Could not find requested city")}
+      }, reject =>{ 
+                    if(location === ''){
+                      window.location.reload(false);
+                    }
+                  else{
+                    alert("Could not find requested city");
+                  }
+                
+                } /*In case the fetch fails, the user is alerted that the requested city
+                    couldn't be found if any input is given, otherwise the page is reloaded
+                    and the user is taken back to the main page*/
+                                                             
       )
-    
-      setLocation('');
-    } 
+  
+      setLocation(''); /*Deletes the inserted city from the search bar*/  
+    }
 
   }
-
+  /*Calculates the local sunset*/
   const getLocalSunset = (response) =>{
 
     const sunsetTime = response.data.sys.sunset;
@@ -86,7 +94,7 @@ function App() {
     var formattedTime = hours + ':' + minutes.substr(-2);
     setLocalSunset(formattedTime);
   }
-
+/*Calculates the local sunrise*/
   const getLocalSunrise = (response) =>{
 
     const sunriseTime = response.data.sys.sunrise;
@@ -104,7 +112,7 @@ function App() {
     setLocalSunrise(formattedTime);
   }
 
-
+/*Calculates the local time*/
   const getCurrentTime = (response) => {
 
     const d = new Date();
@@ -137,6 +145,8 @@ function App() {
   setLocalTimeZone(formattedTime);
   }
 
+  /*Dynamically changes the background and adds a weather icon based on the time of day and weather type*/
+  /*Also changes the search bar size and position based on whether any queries have been made*/
   function setDynamicData(daylight, index) {
     if (daylight === 1){
       document.documentElement.style.setProperty('--background-image', `url(${dayWall[index]})`);
@@ -148,7 +158,7 @@ function App() {
     document.documentElement.style.setProperty('--font-size', `1.7rem`);
     document.documentElement.style.setProperty('--padding', `.7rem`);
   }
-
+/*Helper function to decide which background to choose*/
 function getIndex(){
 
   if(data.weather[0].main === "Clear"){
@@ -187,7 +197,7 @@ function getIndex(){
 
   return -1;
 } 
-
+/*Checks whether a query has been successful, and based on that it then sets the according background and icon*/
   if(typeof data.name != "undefined"){
 
     if(localTimeZone>localSunset || localTimeZone < localSunrise){
@@ -224,7 +234,7 @@ function getIndex(){
         type="text"></input>
         </div>
       <div className='container'>
-        
+
         <div className='top'>
 
           <div className='location'>
