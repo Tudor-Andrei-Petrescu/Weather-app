@@ -47,7 +47,7 @@ To run the app in your browser, run the command npm start in the terminal in the
 ## Project Description
 <img src=/weather-app/src/assets/screenshots/main.PNG width="1500" height="500">
 
-This project has been created using React and Node.js . The icons have been taken from [ICONFINDER](https://www.iconfinder.com/search?q=&price=free&category=weather) and the backgrounds are from [Unsplash](https://unsplash.com/).The app uses the [Open Weather Api](https://openweathermap.org/current) to fetch the current weather information for a given city using the searchLocation function. The URL is built using the location given as input in the search bar and the API generated key: 
+This project has been created using React and Node.js . The icons have been taken from [ICONFINDER](https://www.iconfinder.com/search?q=&price=free&category=weather) and the backgrounds are from [Unsplash](https://unsplash.com/).The app uses axios and the [Open Weather Api](https://openweathermap.org/current) to fetch the current weather information for a given city using the searchLocation function. The URL is built using the location given as input in the search bar and the API generated key: 
 
 ```javascript
   const [location, setLocation] = useState('');
